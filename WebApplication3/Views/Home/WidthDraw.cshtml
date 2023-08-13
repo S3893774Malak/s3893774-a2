@@ -1,0 +1,22 @@
+﻿@model WebApplication3.Models.WidthDraw
+
+@{
+    ViewBag.HideTopNavBar = false;
+}
+
+<h1>WidthDraw</h1>
+<h2>Enter Amount to WidthDraw</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Cash)
+        @Html.TextBoxFor(m => m.Cash, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Comment)
+        @Html.TextBoxFor(m => m.Comment, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">WidthDraw</button>
+}

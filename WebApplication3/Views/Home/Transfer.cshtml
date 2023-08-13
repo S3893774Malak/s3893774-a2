@@ -1,0 +1,30 @@
+﻿@model WebApplication3.Models.Transfer
+
+@{
+    ViewBag.HideTopNavBar = false;
+}
+
+<h1>Transfer</h1>
+<h2>Enter Amount to WidthDraw</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PersonalAccountId)
+        @Html.TextBoxFor(m => m.PersonalAccountId, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DestinationAccountId)
+        @Html.TextBoxFor(m => m.DestinationAccountId, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Amount)
+        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Comment)
+        @Html.TextBoxFor(m => m.Comment, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Transfer</button>
+}
