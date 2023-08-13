@@ -16,12 +16,32 @@ public class AdminService : IAdminService
         _unitOfWork = unitOfWork;
     }
 
-    public ServiceResult UpdateCustomerProfile(int customerId, CustomerProfileUpdateRequest request)
-    {
-        // Implement the logic to update the customer's profile
-        // Use the _unitOfWork to interact with the database
-        // Return a ServiceResult indicating the result of the operation
-    }
+   {
+        try
+        {
+            // Retrieve the customer entity by customerId
+            var customer = _unitOfWork.CustomerRepository.GetCustomerById(customerId);
 
-    // Implement the other service methods for locking/unlocking login and blocking/unblocking scheduled payments
+            if (customer == null)
+            {
+                return ServiceResult.NotFound("Customer not found.");
+            }
+
+            // Update the customer's profile based on the request
+            customer.Name = request.Name;
+            customer.TFN = request.TFN;
+            // Update other properties as needed
+
+            // Save the changes to the database
+            _unitOfWork.SaveChanges();
+
+            return ServiceResult.Success("Customer profile updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            // Handle exceptions and return an appropriate ServiceResult indicating the error
+            return ServiceResult.Error("An error occurred while updating the customer profile.");
+        }
+    }
 }
