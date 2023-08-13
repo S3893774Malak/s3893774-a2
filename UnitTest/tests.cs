@@ -47,6 +47,6 @@ namespace WebApplication.Tests
             Assert.Equal("Profile updated successfully.", okResult.Value);
         }
 
-        // Write similar tests for the other endpoints
+        
     }
 }
