@@ -11,7 +11,7 @@ using WebApplication3.database;
 namespace WebApplication3.database.migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230812182348_initial")]
+    [Migration("20230813065444_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace WebApplication3.database.migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cid")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")

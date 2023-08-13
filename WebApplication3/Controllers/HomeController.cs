@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using WebApplication3.database;
 using WebApplication3.Models;
-
+using SimpleHashing.Net;
 namespace WebApplication3.Controllers
 {
     public class Transaction
@@ -39,7 +40,7 @@ namespace WebApplication3.Controllers
     public class HomeController : Controller
     {
         private readonly DataBaseContext _dataBaseContext;
-
+        private WebApplication3.Models.Customer _customer;
         public HomeController(DataBaseContext context)
         {
             _dataBaseContext = context;
@@ -67,6 +68,7 @@ namespace WebApplication3.Controllers
                         {
                             //readSQL.InsertCustomer(c.CustomerID, c.Name ?? "", c.Address ?? "", c.City ?? "", c.PostCode ?? "");
                             var Customer = new WebApplication3.Models.Customer();
+                            Customer.Cid = c.CustomerID.ToString();
                             Customer.Name = c.Name;
                             Customer.City = c.City;
                             Customer.Address = c.Address;
@@ -135,21 +137,87 @@ namespace WebApplication3.Controllers
             await loadDataAsync();
             return View();
         }
-        [HttpPost]
-        public ActionResult Index(User user)
+        public async Task<WebApplication3.Models.Customer> GetCustomerByEmailAsync(string ID)
         {
-            // Check user credentials (dummy validation for this example)
-            if (user.Id == "admin" && user.Password == "password")
+            try
             {
-                return RedirectToAction("Privacy", "Home");
+                // Find the customer entity by the specified email
+                var customer = await _dataBaseContext.Customer
+                    .FirstOrDefaultAsync(c => c.Cid == ID);
+
+                // Return the customer entity (or null if not found)
+                return customer;
             }
-            else
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
+                // Handle exceptions
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return null;
+            }
+        }
+        public async Task<WebApplication3.Models.Login> GetPassword(int ID)
+        {
+            try
+            {
+                // Find the customer entity by the specified email
+                var Login = await _dataBaseContext.Login
+                    .SingleOrDefaultAsync(c => c.CustomerId == ID);
+
+                // Return the customer entity (or null if not found)
+                return Login;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return null;
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Index(User user)
+        {
+            try
+            {
+                // Retrieve customer asynchronously
+                var customer = await GetCustomerByEmailAsync(user.Id);
+
+                // Check user credentials (dummy validation for this example)
+                if (customer != null)
+                {
+                    Debug.WriteLine("cC:", customer.City);
+                    var login= await GetPassword(customer.Id);
+                    string passwordHash = login.PasswordHash;
+                    Debug.WriteLine("cC:", login.PasswordHash);
+                    if (new SimpleHash().Verify(user.Password, passwordHash))
+                    { 
+                        _customer = customer;
+                        return RedirectToAction("LandingPage", "Home"); 
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Invalid login attempt.");
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View();
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                ModelState.AddModelError("", "An error occurred: " + ex.Message);
                 return View();
             }
         }
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult LandingPage()
         {
             return View();
         }
