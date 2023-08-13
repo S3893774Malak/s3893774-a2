@@ -40,7 +40,8 @@ namespace WebApplication3.Controllers
     public class HomeController : Controller
     {
         private readonly DataBaseContext _dataBaseContext;
-        private WebApplication3.Models.Customer _customer;
+        public static WebApplication3.Models.Customer _customer =new Models.Customer();
+        public static WebApplication3.Models.Account _account = new Models.Account();
         public HomeController(DataBaseContext context)
         {
             _dataBaseContext = context;
@@ -173,6 +174,35 @@ namespace WebApplication3.Controllers
                 return null;
             }
         }
+        public async Task<WebApplication3.Models.Account> GetAccount(int ID)
+        {
+            try
+            {
+                // Find the customer entity by the specified email
+                var Account = await _dataBaseContext.Account
+                    .FirstOrDefaultAsync(c => c.CustomerId == ID);
+
+                // Return the customer entity (or null if not found)
+                return Account;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return null;
+            }
+        }
+        public static void setData(WebApplication3.Models.Account acc,WebApplication3.Models.Customer cus)
+        {           
+           _account = acc;
+           _customer=cus;
+        }
+
+        public List<WebApplication3.Models.Account> GetAccountByCustomer(int id)
+        {
+            // Fetch customers from EF Core context based on the City column
+            return _dataBaseContext.Account.Where(c => c.CustomerId == id).ToList();
+        }
         [HttpPost]
         public async Task<ActionResult> Index(User user)
         {
@@ -189,8 +219,17 @@ namespace WebApplication3.Controllers
                     string passwordHash = login.PasswordHash;
                     Debug.WriteLine("cC:", login.PasswordHash);
                     if (new SimpleHash().Verify(user.Password, passwordHash))
-                    { 
-                        _customer = customer;
+                    {
+                        //this._customer = customer;
+                        var acc=await GetAccount(customer.Id);
+                        Debug.WriteLine("acc:  " + acc.Id);
+                        if (acc != null)
+                        {
+                            Debug.WriteLine("herer");
+                            //this._account = acc;
+                           // Debug.WriteLine("acc:  " + this._account.Id);
+                        }
+                        setData(acc, customer);
                         return RedirectToAction("LandingPage", "Home"); 
                     }
                     else
@@ -213,11 +252,106 @@ namespace WebApplication3.Controllers
                 return View();
             }
         }
+        [HttpPost]
+        public async Task<ActionResult> WidthDraw(WidthDraw data)
+        {
+            try
+            {
+                //Debug.WriteLine("this._customer.Id ", this._customer.Cid);
+                //var account = await GetAccount(this._customer.Id);
+                var Transaction2 = new WebApplication3.Models.Transaction();
+                //readSQL.InsertTransaction("D", acc.AccountNumber, 0, trans.Amount, trans.Comment ?? "", trans.TransactionTimeUtc ?? "");
+                DateTime utcNow = DateTime.UtcNow;
+                Transaction2.TransactionType = "W";
+                Transaction2.AccountId = _account.Id;
+                Transaction2.Comment = data.Comment;
+                Transaction2.TransactionTimeUTC = utcNow.ToString();
+                Transaction2.Amount = data.Cash;
+                _dataBaseContext.Transaction.Add(Transaction2);
+                await _dataBaseContext.SaveChangesAsync();
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                ModelState.AddModelError("", "An error occurred: " + ex.Message);
+                return View();
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Deposit(WidthDraw data)
+        {
+            try
+            {
+                //Debug.WriteLine("this._customer.Id ", this._customer.Cid);
+                //var account = await GetAccount(this._customer.Id);
+                var Transaction2 = new WebApplication3.Models.Transaction();
+                //readSQL.InsertTransaction("D", acc.AccountNumber, 0, trans.Amount, trans.Comment ?? "", trans.TransactionTimeUtc ?? "");
+                DateTime utcNow = DateTime.UtcNow;
+                Transaction2.TransactionType = "W";
+                Transaction2.AccountId = _account.Id;
+                Transaction2.Comment = data.Comment;
+                Transaction2.TransactionTimeUTC = utcNow.ToString();
+                Transaction2.Amount = data.Cash;
+                _dataBaseContext.Transaction.Add(Transaction2);
+                await _dataBaseContext.SaveChangesAsync();
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                ModelState.AddModelError("", "An error occurred: " + ex.Message);
+                return View();
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Transfer(Transfer data)
+        {
+            try
+            {
+                //Debug.WriteLine("this._customer.Id ", this._customer.Cid);
+                //var account = await GetAccount(this._customer.Id);
+                var Transaction2 = new WebApplication3.Models.Transaction();
+                //readSQL.InsertTransaction("D", acc.AccountNumber, 0, trans.Amount, trans.Comment ?? "", trans.TransactionTimeUtc ?? "");
+                DateTime utcNow = DateTime.UtcNow;
+                Transaction2.TransactionType = "W";
+                Transaction2.AccountId = _account.Id;
+                Transaction2.Comment = data.Comment;
+                Transaction2.TransactionTimeUTC = utcNow.ToString();
+                Transaction2.Amount = data.Amount;
+                Transaction2.DestinationAccountNumber = data.DestinationAccountId;
+                _dataBaseContext.Transaction.Add(Transaction2);
+                await _dataBaseContext.SaveChangesAsync();
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                ModelState.AddModelError("", "An error occurred: " + ex.Message);
+                return View();
+            }
+        }
         public IActionResult Privacy()
         {
             return View();
         }
         public IActionResult LandingPage()
+        {
+            return View();
+        }
+        public IActionResult WidthDraw()
+        {
+            return View();
+        }
+
+        public IActionResult Deposit()
+        {
+            return View();
+        }
+        public IActionResult Transfer()
         {
             return View();
         }
