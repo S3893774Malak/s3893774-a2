@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WebApplication3.database.migrations
+namespace WebApplication3.data_access.migrations
 {
     /// <inheritdoc />
     public partial class initial : Migration
@@ -55,6 +55,7 @@ namespace WebApplication3.database.migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccountType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AccountNumber = table.Column<int>(type: "int", nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

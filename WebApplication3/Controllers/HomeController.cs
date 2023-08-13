@@ -90,6 +90,7 @@ namespace WebApplication3.Controllers
                                 double balance = 0;
                                 //readSQL.InsertAccount(acc.AccountNumber, acc.AccountType, c.CustomerID, balance);
                                 Account.AccountType = acc.AccountType;
+                                Account.AccountNumber = acc.AccountNumber;
                                 Account.CustomerId = insertedPrimaryKeyValue;
                                 _dataBaseContext.Account.Add(Account);
                                 await _dataBaseContext.SaveChangesAsync();
@@ -202,6 +203,12 @@ namespace WebApplication3.Controllers
         {
             // Fetch customers from EF Core context based on the City column
             return _dataBaseContext.Account.Where(c => c.CustomerId == id).ToList();
+        }
+
+        public List<WebApplication3.Models.Transaction> GetAllTransactions(int id)
+        {
+            // Fetch customers from EF Core context based on the City column
+            return _dataBaseContext.Transaction.Where(c => c.AccountId == id).ToList();
         }
         [HttpPost]
         public async Task<ActionResult> Index(User user)
@@ -338,9 +345,24 @@ namespace WebApplication3.Controllers
         {
             return View();
         }
+
         public IActionResult LandingPage()
         {
+                var account = GetAccountByCustomer(_customer.Id);
+                // Pass the list of customers to the view
+                return View(account);
+         
+        }
+        public IActionResult Statement()
+        {
             return View();
+
+        }
+        public IActionResult PersonalInformation()
+        { 
+            // Pass the list of customers to the view
+            return View(_customer);
+
         }
         public IActionResult WidthDraw()
         {
