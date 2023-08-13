@@ -1,0 +1,9 @@
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.csproj.AssemblyReference.cache
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.AssemblyInfoInputs.cache
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.AssemblyInfo.cs
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.csproj.CoreCompileInputs.cache
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.RazorAssemblyInfo.cache
+C:\Users\Abdullah\OneDrive\Desktop\GoPython\s3893774-a2\WebApplicationAdminApi\obj\Debug\net7.0\WebApplicationAdminApi.RazorAssemblyInfo.cs

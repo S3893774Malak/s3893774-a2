@@ -1,0 +1,18 @@
+﻿@model AdminPortal.Models.CustomerProfileModel
+
+<h1>Modify Customer Profile</h1>
+
+<form asp-controller="Admin" asp-action="ModifyProfile" method="post">
+    <!-- Display and edit customer profile fields -->
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TFN"></label>
+        <input asp-for="TFN" class="form-control" />
+    </div>
+    <!-- Add more fields -->
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
